@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="257.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="257.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3211.p1.controller.LoginController">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="12.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
@@ -48,7 +48,7 @@
                   <Insets bottom="116.0" right="16.0" />
                </padding>
                <children>
-                  <Button fx:id="loginButton" disable="true" mnemonicParsing="false" onAction="#onLogin" text="Login" />
+                  <Button fx:id="loginButton" disable="false" mnemonicParsing="false" onAction="#onLogin" text="Login" />
                </children>
             </HBox>
          </children>
