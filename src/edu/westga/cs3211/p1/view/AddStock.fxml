@@ -19,8 +19,8 @@
          </padding>
          <children>
             <Label text="Add Stock" />
-            <Button mnemonicParsing="false" onAction="#onOpenViewStockChanges" text="View Stock Changes" />
-            <Button fx:id="onLogout" mnemonicParsing="false" text="Logout" />
+            <Button fx:id="HomeButton" mnemonicParsing="false" onAction="#onHomeButton" text="Home" />
+            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#onLogout" text="Logout" />
          </children>
       </HBox>
    </top>
