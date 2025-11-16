@@ -1,4 +1,4 @@
-package edu.westga.cs3211.p1.controller;
+package edu.westga.cs3211.p1.viewmodel;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -63,7 +63,7 @@ public class LoginController {
                     Scene homeScene = new Scene(loader.load());
                     HomePageController controller = loader.getController();
                     controller.setUsername(enteredUsername);
-                    controller.setOccupation(occupation); // set occupation here
+                    controller.setOccupation(occupation);
                     Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     currentStage.setScene(homeScene);
                     currentStage.setTitle("Pirate Ship Inventory System - Home");
