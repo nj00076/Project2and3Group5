@@ -15,9 +15,23 @@ public class Stock {
         this.specialQuals = specialQuals;
     }
 
-    public String getName() { return name; }
-    public int getSize() { return size; }
-    public String getCondition() { return condition; }
-    public String getExpirationDate() { return expirationDate; }
-    public String getSpecialQuals() { return specialQuals; }
+    public String getName() { 
+    	return this.name; 
+    }
+    
+    public int getSize() { 
+    	return this.size; 
+    }
+    
+    public String getCondition() { 
+    	return this.condition; 
+    }
+    
+    public String getExpirationDate() { 
+    	return this.expirationDate; 
+    }
+    
+    public String getSpecialQuals() { 
+    	return this.specialQuals; 
+    }
 }

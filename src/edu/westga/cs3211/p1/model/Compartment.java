@@ -14,22 +14,26 @@ public class Compartment {
         this.stockList = new ArrayList<>();
     }
 
-    public String getName() { return name; }
+    public String getName() { 
+    	return this.name; 
+    }
 
-    public List<Stock> getStockList() { return stockList; }
+    public List<Stock> getStockList() { 
+    	return this.stockList; 
+    }
 
     public boolean hasFreeSpace() {
-        return getFreeSpace() > 0;
+        return this.getFreeSpace() > 0;
     }
 
     public int getFreeSpace() {
-        int usedSpace = stockList.stream().mapToInt(Stock::getSize).sum();
-        return capacity - usedSpace;
+        int usedSpace = this.stockList.stream().mapToInt(Stock::getSize).sum();
+        return this.capacity - usedSpace;
     }
 
     public void addStock(Stock stock) {
-        if (getFreeSpace() >= stock.getSize()) {
-            stockList.add(stock);
+        if (this.getFreeSpace() >= stock.getSize()) {
+        	this.stockList.add(stock);
         }
     }
 }

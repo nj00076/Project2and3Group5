@@ -5,7 +5,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
@@ -13,9 +12,12 @@ import javafx.scene.Node;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import java.io.IOException;
+
 import edu.westga.cs3211.p1.model.Inventory;
 import edu.westga.cs3211.p1.model.Compartment;
 import edu.westga.cs3211.p1.model.Stock;
+import edu.westga.cs3211.p1.model.StockChange;
+import edu.westga.cs3211.p1.model.InventoryStore;
 
 public class AddStockController {
 
@@ -28,33 +30,38 @@ public class AddStockController {
     @FXML private Label addStockStatus;
     @FXML private Button addButton;
     @FXML private Button logoutButton;
-    @FXML private Button HomeButton;
+    @FXML private Button homeButton;
 
     private String occupation;
     private Inventory inventory;
+    private String username;
 
     public void setOccupation(String occupation) {
         this.occupation = occupation;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
-        typeChoice.getItems().addAll("Food", "Munitions", "Other");
-        conditionChoiceBox.getItems().addAll("New", "Used", "Damaged");
-        sqChoiceBox.getItems().addAll("Perishable", "N/A");
+        this.typeChoice.getItems().addAll("Food", "Munitions", "Other");
+        this.conditionChoiceBox.getItems().addAll("New", "Used", "Damaged");
+        this.sqChoiceBox.getItems().addAll("Perishable", "N/A");
     }
 
     @FXML
     private void onAddStock(ActionEvent event) {
-        //try {
-            String name = nameField.getText();
-            int quantity = Integer.parseInt(quantityField.getText());
-            String compartmentName = typeChoice.getValue();
-            String condition = conditionChoiceBox.getValue();
-            String expDate = datePicker.getValue().toString();
-            String sq = sqChoiceBox.getValue();
+        try {
+            String name = this.nameField.getText();
+            int quantity = Integer.parseInt(this.quantityField.getText());
+            String compartmentName = this.typeChoice.getValue();
+            String condition = this.conditionChoiceBox.getValue();
+            String expDate = this.datePicker.getValue().toString();
+            String sq = this.sqChoiceBox.getValue();
 
-            Compartment selectedComp = inventory.getCompartments().stream()
+            Compartment selectedComp = this.inventory.getCompartments().stream()
                 .filter(c -> c.getName().equalsIgnoreCase(compartmentName))
                 .findFirst()
                 .orElse(null);
@@ -62,55 +69,68 @@ public class AddStockController {
             if (selectedComp != null && selectedComp.hasFreeSpace()) {
                 Stock newStock = new Stock(name, quantity, condition, expDate, sq);
                 selectedComp.addStock(newStock);
-                addStockStatus.setText("Stock added!");
+                String username = this.username;
+                InventoryStore.addChangeLogEntry(new StockChange(username, name, quantity, compartmentName));
+
+                this.addStockStatus.setText("Stock added!");
             } else {
-                addStockStatus.setText("No free space in selected compartment.");
+                this.addStockStatus.setText("No free space in selected compartment.");
             }
-        //} catch (Exception e) {
-           //addStockStatus.setText("Error: " + e.getMessage());
-        //}
+
+        } catch (Exception exception) {
+            this.addStockStatus.setText("Error: " + exception.getMessage());
+        }
     }
 
     @FXML
     private void onClearForm(ActionEvent event) {
-        nameField.clear();
-        quantityField.clear();
-        typeChoice.getSelectionModel().clearSelection();
-        conditionChoiceBox.getSelectionModel().clearSelection();
-        sqChoiceBox.getSelectionModel().clearSelection();
-        datePicker.setValue(null);
-        addStockStatus.setText("");
+        this.nameField.clear();
+        this.quantityField.clear();
+        this.typeChoice.getSelectionModel().clearSelection();
+        this.conditionChoiceBox.getSelectionModel().clearSelection();
+        this.sqChoiceBox.getSelectionModel().clearSelection();
+        this.datePicker.setValue(null);
+        this.addStockStatus.setText("");
     }
 
     @FXML
     private void onHomeButton(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/westga/cs3211/p1/view/HomePage.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/edu/westga/cs3211/p1/view/HomePage.fxml")
+            );
+
             Scene scene = new Scene(loader.load());
             HomePageController controller = loader.getController();
             controller.setOccupation(this.occupation);
             controller.setInventory(this.inventory);
+            controller.setUsername(this.username);
 
-            Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
-            stage.setTitle("Home Page");
+            stage.setTitle("Pirate Ship Inventory Management System -  Home");
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 
     @FXML
     private void onLogout(ActionEvent event) {
-    	try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/westga/cs3211/p1/view/Login.fxml"));
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/edu/westga/cs3211/p1/view/Login.fxml")
+            );
+
             Scene loginScene = new Scene(loader.load());
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.setScene(loginScene);
-            currentStage.setTitle("Pirate Ship Inventory Management System");
+            currentStage.setTitle("Pirate Ship Inventory Management System - Login");
             currentStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 }

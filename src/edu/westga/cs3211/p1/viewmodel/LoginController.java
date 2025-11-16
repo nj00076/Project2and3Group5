@@ -32,14 +32,14 @@ public class LoginController {
 
     @FXML
     private void onLogin(ActionEvent event) {
-        String enteredUsername = usernameField.getText();
-        String enteredPassword = passwordField.getText();
+        String enteredUsername = this.usernameField.getText();
+        String enteredPassword = this.passwordField.getText();
         boolean found = false;
         String occupation = "";
 
         InputStream inputStream = getClass().getResourceAsStream("/edu/westga/cs3211/p1/resources/Logins.txt");
         if (inputStream == null) {
-            errorLabel.setText("Login file not found.");
+        	this.errorLabel.setText("Login file not found.");
             return;
         }
 
@@ -47,7 +47,9 @@ public class LoginController {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length != 3) continue;
+                if (parts.length != 3) {
+                	continue;
+                }
                 String username = parts[0].trim();
                 String password = parts[1].trim();
                 if (username.equals(enteredUsername) && password.equals(enteredPassword)) {
@@ -68,16 +70,16 @@ public class LoginController {
                     currentStage.setScene(homeScene);
                     currentStage.setTitle("Pirate Ship Inventory System - Home");
                     currentStage.show();
-                } catch (IOException e) {
-                    errorLabel.setText("Failed to open HomePage.fxml.");
-                    e.printStackTrace();
+                } catch (IOException exception) {
+                	this.errorLabel.setText("Failed to open HomePage.fxml.");
+                    exception.printStackTrace();
                 }
             } else {
-                errorLabel.setText("Invalid username or password.");
+            	this.errorLabel.setText("Invalid username or password.");
             }
-        } catch (IOException e) {
-            errorLabel.setText("Error reading login file.");
-            e.printStackTrace();
+        } catch (IOException exception) {
+        	this.errorLabel.setText("Error reading login file.");
+            exception.printStackTrace();
         }
     }
 

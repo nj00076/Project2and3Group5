@@ -7,17 +7,17 @@ public class Inventory {
     private List<Compartment> compartments;
 
     public Inventory() {
-        compartments = new ArrayList<>();
-        compartments.add(new Compartment("Food", 100));
-        compartments.add(new Compartment("Munitions", 100));
-        compartments.add(new Compartment("Other", 100));
+    	this.compartments = new ArrayList<>();
+    	this.compartments.add(new Compartment("Food", 100));
+    	this.compartments.add(new Compartment("Munitions", 100));
+    	this.compartments.add(new Compartment("Other", 100));
     }
 
     public List<Compartment> getCompartments() {
-        return compartments;
+        return this.compartments;
     }
 
     public boolean hasFreeSpace() {
-        return compartments.stream().anyMatch(Compartment::hasFreeSpace);
+        return this.compartments.stream().anyMatch(Compartment::hasFreeSpace);
     }
 }

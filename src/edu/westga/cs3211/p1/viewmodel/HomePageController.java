@@ -27,34 +27,44 @@ public class HomePageController {
 
     private String occupation;
     private Inventory inventory;
+    private String username;
 
     @FXML
     public void initialize() {
-        setInventory(InventoryStore.getInventory());
+    	this.setInventory(InventoryStore.getInventory());
     }
 
     public void setUsername(String enteredUsername) {
-        usernameLabel.setText(enteredUsername);
+    	if (this.usernameLabel != null) {
+            this.usernameLabel.setText(enteredUsername);
+        }    	
+    	this.username = enteredUsername;
     }
 
     public void setOccupation(String occupation) {
         this.occupation = occupation;
-        viewStockChangesButton.setDisable(!"Quartermaster".equalsIgnoreCase(occupation));
+        this.updateButtonState();
+    }
+    
+    private void updateButtonState() {
+        if (this.viewStockChangesButton != null && this.occupation != null) {
+            this.viewStockChangesButton.setDisable(!"Quartermaster".equalsIgnoreCase(this.occupation));
+        }
     }
 
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
-        updateStockList();
+        this.updateStockList();
     }
 
     private void updateStockList() {
-        stockList.getItems().clear();
+    	this.stockList.getItems().clear();
 
-        if (inventory == null) {
+        if (this.inventory == null) {
             return;
         }
 
-        for (Compartment comp : inventory.getCompartments()) {
+        for (Compartment comp : this.inventory.getCompartments()) {
             for (Stock stock : comp.getStockList()) {
 
                 String item = String.format(
@@ -67,7 +77,7 @@ public class HomePageController {
                         stock.getSpecialQuals()
                 );
 
-                stockList.getItems().add(item);
+                this.stockList.getItems().add(item);
             }
         }
     }
@@ -82,9 +92,11 @@ public class HomePageController {
 
         AddStockController controller = loader.getController();
         controller.setInventory(InventoryStore.getInventory());
-
+        controller.setOccupation(this.occupation);
+        controller.setUsername(this.username);
         Stage stage = (Stage) this.addStockButton.getScene().getWindow();
         stage.setScene(new Scene(root));
+        stage.setTitle("Pirate Ship Inventory Management System - Add Stock");
     }
 
     @FXML
@@ -98,15 +110,31 @@ public class HomePageController {
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
             currentStage.setScene(loginScene);
-            currentStage.setTitle("Pirate Ship Inventory Management System");
+            currentStage.setTitle("Pirate Ship Inventory Management System - Login");
             currentStage.show();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+        	exception.printStackTrace();
         }
     }
 
     @FXML
     private void onViewStockChanges(ActionEvent event) {
+    	try {
+            FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/edu/westga/cs3211/p1/view/ViewChanges.fxml")
+            );
+            Parent root = loader.load();
+            ViewChangesController controller = loader.getController();
+            controller.setInventory(InventoryStore.getInventory());
+            controller.setUsername(this.username);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Pirate Ship Inventory Management System - View Stock Changes");
+            stage.show();
+
+        } catch (IOException exception) {
+        	exception.printStackTrace();
+        }
     }
 }

@@ -12,7 +12,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/westga/cs3211/p1/view/Login.fxml"));
         Scene scene = new Scene(loader.load());
 
-        stage.setTitle("Pirate Ship Inventory Management System");
+        stage.setTitle("Pirate Ship Inventory Management System - Login");
         stage.setScene(scene);
         stage.show();
     }
