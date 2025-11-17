@@ -1,23 +1,28 @@
 package edu.westga.cs3211.p1.viewmodel;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import java.io.IOException;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
-import edu.westga.cs3211.p1.model.Inventory;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import edu.westga.cs3211.p1.model.Compartment;
+import edu.westga.cs3211.p1.model.Inventory;
+import edu.westga.cs3211.p1.model.InventoryStore;
 import edu.westga.cs3211.p1.model.Stock;
 import edu.westga.cs3211.p1.model.StockChange;
-import edu.westga.cs3211.p1.model.InventoryStore;
 
 public class AddStockController {
 
@@ -46,40 +51,177 @@ public class AddStockController {
 
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
-        this.typeChoice.getItems().addAll("Food", "Munitions", "Other");
-        this.conditionChoiceBox.getItems().addAll("New", "Used", "Damaged");
-        this.sqChoiceBox.getItems().addAll("Perishable", "N/A");
+        this.typeChoice.getItems().clear();
+        if (inventory != null) {
+            for (Compartment compartment : inventory.getCompartments()) {
+                this.typeChoice.getItems().add(compartment.getName());
+            }
+        }
+        this.conditionChoiceBox.getItems().setAll("PERFECT", "USABLE", "UNUSABLE");
+        this.sqChoiceBox.getItems().setAll("N/A", "Perishable", "Flammable", "Liquid");
+        this.datePicker.setValue(null);
     }
 
     @FXML
     private void onAddStock(ActionEvent event) {
+        this.addStockStatus.setText("");
         try {
-            String name = this.nameField.getText();
-            int quantity = Integer.parseInt(this.quantityField.getText());
-            String compartmentName = this.typeChoice.getValue();
-            String condition = this.conditionChoiceBox.getValue();
-            String expDate = this.datePicker.getValue().toString();
-            String sq = this.sqChoiceBox.getValue();
-
-            Compartment selectedComp = this.inventory.getCompartments().stream()
-                .filter(c -> c.getName().equalsIgnoreCase(compartmentName))
-                .findFirst()
-                .orElse(null);
-
-            if (selectedComp != null && selectedComp.hasFreeSpace()) {
-                Stock newStock = new Stock(name, quantity, condition, expDate, sq);
-                selectedComp.addStock(newStock);
-                String username = this.username;
-                InventoryStore.addChangeLogEntry(new StockChange(username, name, quantity, compartmentName));
-
-                this.addStockStatus.setText("Stock added!");
-            } else {
-                this.addStockStatus.setText("No free space in selected compartment.");
+            Stock newStock = this.createStockFromForm();
+            if (newStock == null) {
+            	return;
             }
 
-        } catch (Exception exception) {
-            this.addStockStatus.setText("Error: " + exception.getMessage());
+            Compartment selectedComp = this.compartmentCheck(this.newStockCompartmentName());
+            if (selectedComp == null) {
+                this.addStockStatus.setText("Selected compartment not found.");
+                return;
+            }
+
+            if (!this.checkCompartmentSpace(selectedComp, newStock)) {
+            	return;
+            }
+
+            selectedComp.addStock(newStock);
+            int remaining = selectedComp.getFreeSpace();
+
+            String userToUse = this.resolveUsername();
+
+            StockChange change = new StockChange(
+                userToUse,
+                newStock,
+                selectedComp.getName(),
+                remaining
+            );
+            InventoryStore.addChangeLogEntry(change);
+
+            this.addStockStatus.setText("Stock added to " + selectedComp.getName() + ". Remaining capacity: " + remaining);
+
+        } catch (Exception ex) {
+            this.addStockStatus.setText("Error: " + ex.getMessage());
+            ex.printStackTrace();
         }
+    }
+    
+    private String resolveUsername() {
+        if (this.username == null) {
+            return "unknown";
+        }
+        return this.username;
+    }
+
+    private Stock createStockFromForm() {
+        String name = this.nameField.getText();
+        if (name == null || name.isBlank()) {
+            this.addStockStatus.setText("Name is required.");
+            return null;
+        }
+
+        String qtyText = this.quantityField.getText();
+        if (qtyText == null || qtyText.isBlank()) {
+            this.addStockStatus.setText("Quantity is required.");
+            return null;
+        }
+
+        int quantity;
+        try {
+            quantity = Integer.parseInt(qtyText);
+            if (quantity <= 0) {
+                this.addStockStatus.setText("Quantity must be a positive integer.");
+                return null;
+            }
+        } catch (NumberFormatException nfe) {
+            this.addStockStatus.setText("Quantity must be an integer.");
+            return null;
+        }
+
+        String compartmentName = this.typeChoice.getValue();
+        if (compartmentName == null) {
+            this.addStockStatus.setText("Select a compartment.");
+            return null;
+        }
+
+        String conditionStr = this.conditionChoiceBox.getValue();
+        if (conditionStr == null) {
+            this.addStockStatus.setText("Select a condition.");
+            return null;
+        }
+
+        Stock.Condition conditionEnum = this.conditionSwitch(conditionStr);
+        List<Stock.SpecialQuality> qualities = this.sqSelectionSetup();
+
+        LocalDate expiration = null;
+        if (qualities.contains(Stock.SpecialQuality.PERISHABLE)) {
+            expiration = this.datePicker.getValue();
+            if (expiration == null) {
+                this.addStockStatus.setText("Expiration date required for perishable stock.");
+                return null;
+            }
+        }
+
+        return new Stock(name, quantity, conditionEnum, qualities, expiration, quantity);
+    }
+
+    private boolean checkCompartmentSpace(Compartment selectedComp, Stock newStock) {
+        int free = selectedComp.getFreeSpace();
+        if (free >= newStock.getSize()) {
+        	return true;
+        }
+
+        List<String> candidates = new ArrayList<>();
+        if (this.inventory != null) {
+            candidates = this.inventory.getCompartments().stream()
+                    .filter(c -> c.getFreeSpace() >= newStock.getSize())
+                    .map(Compartment::getName)
+                    .collect(Collectors.toList());
+        }
+
+        if (candidates.isEmpty()) {
+            this.addStockStatus.setText("No storage compartment has sufficient space for this quantity.");
+        } else {
+            this.addStockStatus.setText("Selected compartment lacks space. Other compartments with capacity: "
+                    + String.join(", ", candidates));
+        }
+        return false;
+    }
+
+    private String newStockCompartmentName() {
+        return this.typeChoice.getValue();
+    }
+
+    private Stock.Condition conditionSwitch(String conditionStr) {
+        switch (conditionStr.toLowerCase()) {
+            case "new":     return Stock.Condition.PERFECT;
+            case "used":    return Stock.Condition.USABLE;
+            case "damaged": return Stock.Condition.UNUSABLE;
+            default:        return Stock.Condition.USABLE;
+        }
+    }
+
+    private Compartment compartmentCheck(String compartmentName) {
+        if (this.inventory != null) {
+            return this.inventory.getCompartments().stream()
+                    .filter(c -> c.getName().equalsIgnoreCase(compartmentName))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
+    }
+
+    private List<Stock.SpecialQuality> sqSelectionSetup() {
+        String sqSelection = this.sqChoiceBox.getValue();
+        List<Stock.SpecialQuality> qualities = new ArrayList<>();
+        if (sqSelection != null) {
+            switch (sqSelection.toLowerCase()) {
+                case "perishable": qualities.add(Stock.SpecialQuality.PERISHABLE); 
+                break;
+                case "flammable":  qualities.add(Stock.SpecialQuality.FLAMMABLE);  
+                break;
+                case "liquid":     qualities.add(Stock.SpecialQuality.LIQUID);     
+                break;
+                default: break;
+            }
+        }
+        return qualities;
     }
 
     @FXML
@@ -97,9 +239,8 @@ public class AddStockController {
     private void onHomeButton(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/edu/westga/cs3211/p1/view/HomePage.fxml")
+                    getClass().getResource("/edu/westga/cs3211/p1/view/HomePage.fxml")
             );
-
             Scene scene = new Scene(loader.load());
             HomePageController controller = loader.getController();
             controller.setOccupation(this.occupation);
@@ -110,7 +251,6 @@ public class AddStockController {
             stage.setScene(scene);
             stage.setTitle("Pirate Ship Inventory Management System -  Home");
             stage.show();
-
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -120,15 +260,13 @@ public class AddStockController {
     private void onLogout(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/edu/westga/cs3211/p1/view/Login.fxml")
+                    getClass().getResource("/edu/westga/cs3211/p1/view/Login.fxml")
             );
-
             Scene loginScene = new Scene(loader.load());
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.setScene(loginScene);
             currentStage.setTitle("Pirate Ship Inventory Management System - Login");
             currentStage.show();
-
         } catch (IOException exception) {
             exception.printStackTrace();
         }

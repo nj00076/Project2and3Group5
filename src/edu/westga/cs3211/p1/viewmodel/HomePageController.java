@@ -31,21 +31,21 @@ public class HomePageController {
 
     @FXML
     public void initialize() {
-    	this.setInventory(InventoryStore.getInventory());
+        this.setInventory(InventoryStore.getInventory());
     }
 
     public void setUsername(String enteredUsername) {
-    	if (this.usernameLabel != null) {
+        if (this.usernameLabel != null) {
             this.usernameLabel.setText(enteredUsername);
-        }    	
-    	this.username = enteredUsername;
+        }
+        this.username = enteredUsername;
     }
 
     public void setOccupation(String occupation) {
         this.occupation = occupation;
         this.updateButtonState();
     }
-    
+
     private void updateButtonState() {
         if (this.viewStockChangesButton != null && this.occupation != null) {
             this.viewStockChangesButton.setDisable(!"Quartermaster".equalsIgnoreCase(this.occupation));
@@ -58,8 +58,7 @@ public class HomePageController {
     }
 
     private void updateStockList() {
-    	this.stockList.getItems().clear();
-
+        this.stockList.getItems().clear();
         if (this.inventory == null) {
             return;
         }
@@ -67,14 +66,16 @@ public class HomePageController {
         for (Compartment comp : this.inventory.getCompartments()) {
             for (Stock stock : comp.getStockList()) {
 
+                String qualitiesText = stock.getQualities().toString();
+
                 String item = String.format(
-                        "%s - %s (%s) - Qty: %d - Exp: %s - SQ: %s",
-                        comp.getName(),
-                        stock.getName(),
-                        stock.getCondition(),
-                        stock.getSize(),
-                        stock.getExpirationDate(),
-                        stock.getSpecialQuals()
+                    "%s - %s (%s) - Qty: %d - Exp: %s - SQ: %s",
+                    comp.getName(),
+                    stock.getName(),
+                    stock.getCondition(),
+                    stock.getSize(),
+                    stock.getExpirationDate(),
+                    qualitiesText
                 );
 
                 this.stockList.getItems().add(item);
@@ -89,11 +90,12 @@ public class HomePageController {
         );
 
         Parent root = loader.load();
-
         AddStockController controller = loader.getController();
+
         controller.setInventory(InventoryStore.getInventory());
         controller.setOccupation(this.occupation);
         controller.setUsername(this.username);
+
         Stage stage = (Stage) this.addStockButton.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setTitle("Pirate Ship Inventory Management System - Add Stock");
@@ -114,13 +116,13 @@ public class HomePageController {
             currentStage.show();
 
         } catch (IOException exception) {
-        	exception.printStackTrace();
+            exception.printStackTrace();
         }
     }
 
     @FXML
     private void onViewStockChanges(ActionEvent event) {
-    	try {
+        try {
             FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/edu/westga/cs3211/p1/view/ViewChanges.fxml")
             );
@@ -132,9 +134,8 @@ public class HomePageController {
             stage.setScene(new Scene(root));
             stage.setTitle("Pirate Ship Inventory Management System - View Stock Changes");
             stage.show();
-
         } catch (IOException exception) {
-        	exception.printStackTrace();
+            exception.printStackTrace();
         }
     }
 }

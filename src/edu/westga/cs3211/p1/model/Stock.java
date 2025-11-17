@@ -1,37 +1,57 @@
 package edu.westga.cs3211.p1.model;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public class Stock {
+
+    public enum Condition {
+        PERFECT, USABLE, UNUSABLE
+    }
+
+    public enum SpecialQuality {
+        FLAMMABLE, LIQUID, PERISHABLE
+    }
+
     private String name;
+    private int quantity;
+    private Condition condition;
+    private List<SpecialQuality> qualities;
+    private LocalDate expirationDate;
     private int size;
-    private String condition;
-    private String expirationDate;
-    private String specialQuals;
 
-    public Stock(String name, int size, String condition, String expirationDate, String specialQuals) {
+    public Stock(String name, int quantity, Condition condition, 
+                 List<SpecialQuality> qualities, LocalDate expirationDate, int size) {
+
         this.name = name;
-        this.size = size;
+        this.quantity = quantity;
         this.condition = condition;
+        this.qualities = qualities;
         this.expirationDate = expirationDate;
-        this.specialQuals = specialQuals;
+        this.size = size;
     }
 
-    public String getName() { 
-    	return this.name; 
+    public String getName() {
+        return this.name;
     }
-    
-    public int getSize() { 
-    	return this.size; 
+
+    public int getQuantity() {
+        return this.quantity;
     }
-    
-    public String getCondition() { 
-    	return this.condition; 
+
+    public Condition getCondition() {
+        return this.condition;
     }
-    
-    public String getExpirationDate() { 
-    	return this.expirationDate; 
+
+    public List<SpecialQuality> getQualities() {
+        return this.qualities;
     }
-    
-    public String getSpecialQuals() { 
-    	return this.specialQuals; 
+
+    public LocalDate getExpirationDate() {
+        return this.expirationDate;
+    }
+
+    public int getSize() {
+        return this.size;
     }
 }
