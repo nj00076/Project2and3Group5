@@ -11,19 +11,23 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import edu.westga.cs3211.p1.model.Compartment;
 import edu.westga.cs3211.p1.model.Inventory;
 import edu.westga.cs3211.p1.model.InventoryStore;
 import edu.westga.cs3211.p1.model.Stock;
 import edu.westga.cs3211.p1.model.StockChange;
 
+/**
+ * Controller for the Add Stock UI screen.
+ * Handles form input validation, stock creation, adding to inventory, and updating the change log.
+ * @author nj00076
+ * @version cs3211
+ */
 public class AddStockController {
 
     @FXML private TextField nameField;
@@ -41,14 +45,29 @@ public class AddStockController {
     private Inventory inventory;
     private String username;
 
+    /**
+     * Sets the occupation of the current user.
+     *
+     * @param occupation the occupation string
+     */
     public void setOccupation(String occupation) {
         this.occupation = occupation;
     }
 
+    /**
+     * Sets the username of the current user.
+     *
+     * @param username the username string
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Sets the inventory for this controller and populates UI choice boxes.
+     *
+     * @param inventory the Inventory object
+     */
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
         this.typeChoice.getItems().clear();
@@ -62,6 +81,12 @@ public class AddStockController {
         this.datePicker.setValue(null);
     }
 
+    /**
+     * Handles the Add Stock button action.
+     * Validates input, creates a Stock object, adds it to the selected compartment, and logs the change.
+     *
+     * @param event the action event
+     */
     @FXML
     private void onAddStock(ActionEvent event) {
         this.addStockStatus.setText("");
@@ -83,32 +108,35 @@ public class AddStockController {
 
             selectedComp.addStock(newStock);
             int remaining = selectedComp.getFreeSpace();
-
             String userToUse = this.resolveUsername();
-
-            StockChange change = new StockChange(
-                userToUse,
-                newStock,
-                selectedComp.getName(),
-                remaining
-            );
+            StockChange change = new StockChange(userToUse, newStock, selectedComp.getName(), remaining);
             InventoryStore.addChangeLogEntry(change);
 
-            this.addStockStatus.setText("Stock added to " + selectedComp.getName() + ". Remaining capacity: " + remaining);
-
+            this.addStockStatus.setText("Stock added to " + selectedComp.getName()
+             + ". Remaining capacity: " + remaining);
         } catch (Exception ex) {
             this.addStockStatus.setText("Error: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
-    
+
+    /**
+     * Resolves username for logging. Returns "unknown" if username is null.
+     *
+     * @return the username string
+     */
     private String resolveUsername() {
         if (this.username == null) {
-            return "unknown";
+        	return "unknown";
         }
         return this.username;
     }
 
+    /**
+     * Creates a Stock object from the form fields, performing validation.
+     *
+     * @return the created Stock object or null if validation fails
+     */
     private Stock createStockFromForm() {
         String name = this.nameField.getText();
         if (name == null || name.isBlank()) {
@@ -148,7 +176,6 @@ public class AddStockController {
 
         Stock.Condition conditionEnum = this.conditionSwitch(conditionStr);
         List<Stock.SpecialQuality> qualities = this.sqSelectionSetup();
-
         LocalDate expiration = null;
         if (qualities.contains(Stock.SpecialQuality.PERISHABLE)) {
             expiration = this.datePicker.getValue();
@@ -161,6 +188,13 @@ public class AddStockController {
         return new Stock(name, quantity, conditionEnum, qualities, expiration, quantity);
     }
 
+    /**
+     * Checks whether the selected compartment has sufficient space for the new stock.
+     *
+     * @param selectedComp the selected Compartment
+     * @param newStock     the Stock to add
+     * @return true if there is sufficient space; false otherwise
+     */
     private boolean checkCompartmentSpace(Compartment selectedComp, Stock newStock) {
         int free = selectedComp.getFreeSpace();
         if (free >= newStock.getSize()) {
@@ -224,6 +258,11 @@ public class AddStockController {
         return qualities;
     }
 
+    /**
+     * Clears all fields in the Add Stock form.
+     *
+     * @param event the action event
+     */
     @FXML
     private void onClearForm(ActionEvent event) {
         this.nameField.clear();
@@ -235,18 +274,20 @@ public class AddStockController {
         this.addStockStatus.setText("");
     }
 
+    /**
+     * Handles the Home button action, navigating to the Home Page scene.
+     *
+     * @param event the action event
+     */
     @FXML
     private void onHomeButton(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/edu/westga/cs3211/p1/view/HomePage.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/westga/cs3211/p1/view/HomePage.fxml"));
             Scene scene = new Scene(loader.load());
             HomePageController controller = loader.getController();
             controller.setOccupation(this.occupation);
             controller.setInventory(this.inventory);
             controller.setUsername(this.username);
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.setTitle("Pirate Ship Inventory Management System -  Home");
@@ -256,12 +297,15 @@ public class AddStockController {
         }
     }
 
+    /**
+     * Handles the Logout button action, navigating to the Login scene.
+     *
+     * @param event the action event
+     */
     @FXML
     private void onLogout(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/edu/westga/cs3211/p1/view/Login.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/westga/cs3211/p1/view/Login.fxml"));
             Scene loginScene = new Scene(loader.load());
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.setScene(loginScene);
