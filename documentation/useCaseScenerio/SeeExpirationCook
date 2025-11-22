@@ -1,1 +1,16 @@
--todo
+**Context**
+Cook is logged in
+
+**Primary Flow**
+
+1. User indicates they want to see expiration of food by a certain date.
+2. Current Food Inventory with that filter is displayed
+3.
+4. User can still add or cook food
+
+**Alternative Flows**
+
+*No items are set to expire by the given day*
+
+A3. System informs the user that nothing will expire up to that point.
+A4. Return to Primary Flow 2.
