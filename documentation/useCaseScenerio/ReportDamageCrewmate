@@ -1,1 +1,14 @@
--todo
+**Context**
+User is logged in
+
+**Primary Flow**
+1. The user indicates that they want to report damage
+2. The user then selects which item(s) they want to report as damaged
+3. The user then marks said items as damaged
+
+**Alternate Flows**
+1. The user did not select an item or items before trying to mark them as damaged
+2. The user is informed that no item is selected
+3. The report as damaged mechanism is disabled unti they do
+3. Back to line 2
+
