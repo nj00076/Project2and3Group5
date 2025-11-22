@@ -1,0 +1,9 @@
+**Context**
+Any role is logged in
+
+**Primary Flow**
+
+1. From any page, the user selects logout button.
+2. The system returns to the login page
+3. Model updates logged in user
+
