@@ -13,15 +13,12 @@ Cook is logged in
 
 **Alternative Flows**
 
-*Show all expired items*
+*No Item has been selected*
 
-A2. Cook clicks see all expired button 
-A3. System displays all foods that are expired
-A4. Return to primary flow step 3
+A3. System informs the user that an item must be selected, Inventory does not update.
+A4. Return to Primary Flow 2.
 
-*Filtering*
+*No Reason was provided*
 
-A3. Systems allows user to add a lower-bound date to filter food items by
-A4. User clicks filter button
-A5. System updates display to show items from that date to the present
-A6. Return to primary flow step 3
+A3. System informs the user that an item must have a reason for removal, Inventory does not update.
+A4. Return to Primary Flow 3.
