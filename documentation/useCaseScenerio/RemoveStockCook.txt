@@ -1,0 +1,27 @@
+**Context**
+Cook is logged in
+
+**Primary Flow**
+
+1. User indicates they want to remove stock from the system
+2. Current Food Inventory is displayed
+3. User selects on which item to remove
+4. User types a reason for stock removal in the dropdown
+5. User clicks Remove Stock button
+6. Model updates to reflect this removal
+7. System displays confirmation message
+
+**Alternative Flows**
+
+*Show all expired items*
+
+A2. Cook clicks see all expired button 
+A3. System displays all foods that are expired
+A4. Return to primary flow step 3
+
+*Filtering*
+
+A3. Systems allows user to add a lower-bound date to filter food items by
+A4. User clicks filter button
+A5. System updates display to show items from that date to the present
+A6. Return to primary flow step 3
