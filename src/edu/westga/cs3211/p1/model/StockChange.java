@@ -23,10 +23,10 @@ public class StockChange {
      * Constructs a new StockChange record.
      *
      * @param username        the name of the user adding the stock
-     * @param stock           the stock item added
+     * @param stock           the stock item changed
      * @param compartmentName the compartment name where the stock was stored
      * @param remaining       the remaining space in the compartment after adding
-     * @param reason 
+     * @param reason          the reason item changed
      */
     public StockChange(String username, Stock stock, String compartmentName, int remaining, String reason) {
         this.username = username;
