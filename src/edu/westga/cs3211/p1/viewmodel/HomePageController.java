@@ -184,5 +184,8 @@ public class HomePageController {
         if (this.viewStockChangesButton != null && this.occupation != null) {
             this.viewStockChangesButton.setDisable(!"Quartermaster".equalsIgnoreCase(this.occupation));
         }
+        if (this.removeStockButton != null && this.occupation != null) {
+            this.removeStockButton.setDisable(!"Officer".equalsIgnoreCase(this.occupation));
+        }
     }
 }

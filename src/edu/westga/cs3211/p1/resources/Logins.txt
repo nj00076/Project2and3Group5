@@ -1,2 +1,3 @@
 Quartermaster,password,Quartermaster
 Crewmate1,12345,Crewmate
+Officer,12345,Officer
