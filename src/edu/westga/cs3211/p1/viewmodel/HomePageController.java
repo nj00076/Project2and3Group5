@@ -28,6 +28,7 @@ public class HomePageController {
 
     @FXML private Label usernameLabel;
     @FXML private Button addStockButton;
+    @FXML private Button removeStockButton;
     @FXML private Button viewStockChangesButton;
     @FXML private Button logoutButton;
     @FXML private ListView<String> stockList;
@@ -93,6 +94,19 @@ public class HomePageController {
         Stage stage = (Stage) this.addStockButton.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setTitle("Pirate Ship Inventory Management System - Add Stock");
+    }
+    
+    @FXML
+    private void onRemoveStock() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/westga/cs3211/p1/view/RemoveStockOfficer.fxml"));
+        Parent root = loader.load();
+        RemoveStockOfficerController controller = loader.getController();
+        controller.setInventory(InventoryStore.getInventory());
+        controller.setOccupation(this.occupation);
+        controller.setUsername(this.username);
+        Stage stage = (Stage) this.removeStockButton.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Pirate Ship Inventory Management System - Remove Stock");
     }
 
     /**
