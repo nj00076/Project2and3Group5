@@ -39,7 +39,7 @@ class InventoryStoreTest {
     void testAddChangeLogEntry() {
         Stock stock = new Stock("Rum", 5, Stock.Condition.PERFECT,
                 List.of(Stock.SpecialQuality.FLAMMABLE), null, 5);
-        StockChange change = new StockChange("user1", stock, "compartment1", 5);
+        StockChange change = new StockChange("user1", stock, "compartment1", 5, "");
         InventoryStore.addChangeLogEntry(change);
 
         List<StockChange> log = InventoryStore.getChangeLog();
@@ -51,11 +51,11 @@ class InventoryStoreTest {
     void testAddMultipleChangeLogEntries() {
         Stock stock1 = new Stock("Rum", 5, Stock.Condition.PERFECT,
                 List.of(Stock.SpecialQuality.FLAMMABLE), null, 5);
-        StockChange change1 = new StockChange("user1", stock1, "compartment1", 5);
+        StockChange change1 = new StockChange("user1", stock1, "compartment1", 5, "");
 
         Stock stock2 = new Stock("Water", 2, Stock.Condition.USABLE,
                 List.of(Stock.SpecialQuality.PERISHABLE), null, 2);
-        StockChange change2 = new StockChange("user2", stock2, "compartment2", 2);
+        StockChange change2 = new StockChange("user2", stock2, "compartment2", 2, "");
 
         InventoryStore.addChangeLogEntry(change1);
         InventoryStore.addChangeLogEntry(change2);

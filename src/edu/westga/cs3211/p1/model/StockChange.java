@@ -17,6 +17,7 @@ public class StockChange {
     private String compartmentName;
     private int remaining;
     private LocalDateTime timestamp;
+    private String reason;
 
     /**
      * Constructs a new StockChange record.
@@ -25,13 +26,24 @@ public class StockChange {
      * @param stock           the stock item added
      * @param compartmentName the compartment name where the stock was stored
      * @param remaining       the remaining space in the compartment after adding
+     * @param reason 
      */
-    public StockChange(String username, Stock stock, String compartmentName, int remaining) {
+    public StockChange(String username, Stock stock, String compartmentName, int remaining, String reason) {
         this.username = username;
         this.stock = stock;
         this.compartmentName = compartmentName;
         this.remaining = remaining;
         this.timestamp = LocalDateTime.now();
+        this.reason = reason;
+    }
+    
+    /**
+     * Returns the reason associated with this stock change.
+     *
+     * @return the reason
+     */
+    public String getReason() {
+        return this.reason;
     }
 
     /**

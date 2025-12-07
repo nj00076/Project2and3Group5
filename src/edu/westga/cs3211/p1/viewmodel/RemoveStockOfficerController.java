@@ -6,6 +6,7 @@ import java.util.Optional;
 import edu.westga.cs3211.p1.model.ChangeLogStore;
 import edu.westga.cs3211.p1.model.Compartment;
 import edu.westga.cs3211.p1.model.Inventory;
+import edu.westga.cs3211.p1.model.InventoryStore;
 import edu.westga.cs3211.p1.model.Stock;
 import edu.westga.cs3211.p1.model.StockChange;
 
@@ -31,10 +32,8 @@ public class RemoveStockOfficerController {
 
     @FXML
     private ListView<String> munitionsListView;
-
     @FXML
     private TextField reasonTextField;
-
     @FXML
     private Label errorLabel;
 
@@ -63,7 +62,6 @@ public class RemoveStockOfficerController {
         }
 
         munitionsList = FXCollections.observableArrayList();
-
         if (munitions != null) {
             for (Stock stock : munitions.getStockList()) {
                 String qualitiesText = stock.getQualities().toString();
@@ -81,7 +79,6 @@ public class RemoveStockOfficerController {
         }
 
         munitionsListView.setItems(munitionsList);
-
         if (errorLabel != null) {
             errorLabel.setText("");
         }
@@ -100,7 +97,6 @@ public class RemoveStockOfficerController {
                 break;
             }
         }
-
         if (munitions == null) {
             if (errorLabel != null) {
                 errorLabel.setText("No munitions compartment found.");
@@ -165,9 +161,8 @@ public class RemoveStockOfficerController {
 
         munitions.getStockList().remove(selectedStock);
         munitionsList.remove(selectedString);
-        ChangeLogStore.addChange(
-            new StockChange(username, selectedStock, "Munitions", munitions.getFreeSpace())
-        );
+        StockChange change = new StockChange(username, selectedStock, "Munitions", munitions.getFreeSpace(), "Removed Stock: " + reason);
+        InventoryStore.addChangeLogEntry(change);
         reasonTextField.clear();
     }
 

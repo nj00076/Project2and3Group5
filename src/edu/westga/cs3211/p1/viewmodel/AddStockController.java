@@ -109,7 +109,7 @@ public class AddStockController {
             selectedComp.addStock(newStock);
             int remaining = selectedComp.getFreeSpace();
             String userToUse = this.resolveUsername();
-            StockChange change = new StockChange(userToUse, newStock, selectedComp.getName(), remaining);
+            StockChange change = new StockChange(userToUse, newStock, selectedComp.getName(), remaining, "Added Stock");
             InventoryStore.addChangeLogEntry(change);
 
             this.addStockStatus.setText("Stock added to " + selectedComp.getName()
