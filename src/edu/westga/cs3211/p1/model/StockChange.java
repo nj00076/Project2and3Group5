@@ -85,7 +85,7 @@ public class StockChange {
     /**
      * Returns the timestamp of when this stock change occurred.
      *
-     * @return the timestamp
+     * @return the timestampp
      */
     public LocalDateTime getTimestamp() {
         return this.timestamp;
