@@ -98,6 +98,7 @@ public class HomePageController {
     
     @FXML
     private void onRemoveStock() throws IOException {
+    	//seperate out cook and officer here depending on occupation
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/westga/cs3211/p1/view/RemoveStockOfficer.fxml"));
         Parent root = loader.load();
         RemoveStockOfficerController controller = loader.getController();
@@ -184,6 +185,7 @@ public class HomePageController {
         if (this.viewStockChangesButton != null && this.occupation != null) {
             this.viewStockChangesButton.setDisable(!"Quartermaster".equalsIgnoreCase(this.occupation));
         }
+        //add or cook
         if (this.removeStockButton != null && this.occupation != null) {
             this.removeStockButton.setDisable(!"Officer".equalsIgnoreCase(this.occupation));
         }
