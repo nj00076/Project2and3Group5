@@ -1,0 +1,24 @@
+**Context**
+Officer is logged in
+
+**Primary Flow**
+
+1. User indicates they want to remove stock from the system
+2. Current Munitions Inventory is displayed
+3. User selects on which item to remove
+4. User types a reason for stock removal in the dropdown
+5. User clicks Remove Stock button
+6. Model updates to reflect this removal
+7. System displays confirmation message
+
+**Alternative Flows**
+
+*No Item has been selected*
+
+A3. System informs the user that an item must be selected, Inventory does not update.
+A4. Return to Primary Flow 2.
+
+*No Reason was provided*
+
+A3. System informs the user that an item must have a reason for removal, Inventory does not update.
+A4. Return to Primary Flow 3.
