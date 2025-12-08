@@ -21,7 +21,7 @@ class StockChangeTest {
                 List.of(Stock.SpecialQuality.FLAMMABLE, Stock.SpecialQuality.PERISHABLE),
                 LocalDate.of(2025, 12, 31),
                 5);
-        change = new StockChange(username, stock, "compartment1", 50);
+        change = new StockChange(username, stock, "compartment1", 50, "");
     }
 
     @Test
@@ -54,7 +54,7 @@ class StockChangeTest {
                 List.of(Stock.SpecialQuality.FLAMMABLE),
                 null,
                 5);
-        StockChange changeQual = new StockChange("mate", stockQual, "compartment1", 20);
+        StockChange changeQual = new StockChange("mate", stockQual, "compartment1", 20, "");
         String result = changeQual.toString();
         assertTrue(result.contains("FLAMMABLE"));
         assertFalse(result.contains("Expiration Date"));
@@ -66,7 +66,7 @@ class StockChangeTest {
                 List.of(),
                 LocalDate.of(2026, 1, 1),
                 8);
-        StockChange changeExp = new StockChange("crew", stockExp, "compartment1", 10);
+        StockChange changeExp = new StockChange("crew", stockExp, "compartment1", 10, "");
         String result = changeExp.toString();
         assertFalse(result.contains("Special Qualities"));
         assertTrue(result.contains("01/01/26"));
@@ -79,7 +79,7 @@ class StockChangeTest {
                 List.of(),
                 null,
                 3);
-        StockChange changeNoQual = new StockChange("mate", stockNoQual, "compartment1", 100);
+        StockChange changeNoQual = new StockChange("mate", stockNoQual, "compartment1", 100, "");
         String result = changeNoQual.toString();
         assertTrue(result.contains("mate"));
         assertTrue(result.contains("Water"));

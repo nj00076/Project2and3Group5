@@ -1,0 +1,17 @@
+**Context**
+Officer is logged in
+
+**Primary Flow**
+
+1. User indicates they want to view thefts
+2. An incident report list view is shown
+3. User selects an incident to remove after consideration
+4. User clicks Remove Incident button
+5. Models updates to reflect this removal
+
+**Alternative Flows**
+
+*No Item has been selected*
+
+A3. System informs the user that an incident must be selected, Inventory does not update.
+A4. Return to Primary Flow 2.

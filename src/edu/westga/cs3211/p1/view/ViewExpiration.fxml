@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="edu.westga.cs3211.p1.viewmodel.ViewExpirationController">
+
+	<top>
+		<HBox spacing="10" alignment="CENTER"
+			style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+			<Label
+				text="Pirate Ship Inventory System - Food Expiration Tracker"
+				style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18px;" />
+		</HBox>
+	</top>
+
+	<center>
+		<VBox spacing="15" alignment="TOP_CENTER"
+			style="-fx-padding: 20;">
+
+			<HBox spacing="20" alignment="CENTER_LEFT"
+				style="-fx-padding: 10; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-border-radius: 5;">
+				<VBox spacing="5">
+					<Label text="Filter by Expiration Date:"
+						style="-fx-font-weight: bold;" />
+					<HBox spacing="10" alignment="CENTER_LEFT">
+						<DatePicker fx:id="expirationDatePicker"
+							promptText="Select date..." />
+						<Button text="Filter by Date" onAction="#onFilterByDate"
+							style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;" />
+						<Button text="Show All Food" onAction="#onShowAllFood"
+							style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;" />
+					</HBox>
+					<Label
+						text="Shows food items that expire on or before the selected date."
+						style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d;" />
+				</VBox>
+			</HBox>
+
+
+			<Label fx:id="statusLabel"
+				style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" />
+
+
+			<Label text="Food Inventory"
+				style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+			<ListView fx:id="foodListView" VBox.vgrow="ALWAYS"
+				prefWidth="800" prefHeight="350">
+				<VBox.margin>
+					<Insets bottom="10" />
+				</VBox.margin>
+			</ListView>
+		</VBox>
+	</center>
+
+	<bottom>
+		<HBox spacing="20" alignment="CENTER"
+			style="-fx-background-color: #ecf0f1; -fx-padding: 15;">
+			<Button text="Home" onAction="#onHomeButton"
+				style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16;" />
+			<Button text="Logout" onAction="#onLogout"
+				style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16;" />
+		</HBox>
+	</bottom>
+
+</BorderPane>

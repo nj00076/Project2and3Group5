@@ -22,8 +22,8 @@ class ChangeLogStoreTest {
 
     @Test
     void testAddChangeAndGetChanges() {
-        StockChange change1 = new StockChange("crew", null, "Compartment1", 0);
-        StockChange change2 = new StockChange("mate", null, "Compartment2", 5);
+        StockChange change1 = new StockChange("crew", null, "Compartment1", 0, "");
+        StockChange change2 = new StockChange("mate", null, "Compartment2", 5, "");
 
         assertTrue(ChangeLogStore.getChanges().isEmpty());
 
@@ -49,7 +49,7 @@ class ChangeLogStoreTest {
     @Test
     void testGetChangesAlwaysReturnsSameList() {
         List<StockChange> list1 = ChangeLogStore.getChanges();
-        StockChange change = new StockChange("crew", null, "Compartment3", 1);
+        StockChange change = new StockChange("crew", null, "Compartment3", 1, "");
         ChangeLogStore.addChange(change);
         List<StockChange> list2 = ChangeLogStore.getChanges();
         assertSame(list1, list2);
@@ -59,8 +59,8 @@ class ChangeLogStoreTest {
     @Test
     void testMultipleGetChangesAndAdditions() {
         List<StockChange> listBefore = ChangeLogStore.getChanges();
-        StockChange change1 = new StockChange("crew", null, "Compartment4", 2);
-        StockChange change2 = new StockChange("mate", null, "Compartment5", 3);
+        StockChange change1 = new StockChange("crew", null, "Compartment4", 2, "");
+        StockChange change2 = new StockChange("mate", null, "Compartment5", 3, "");
 
         ChangeLogStore.addChange(change1);
         ChangeLogStore.addChange(change2);

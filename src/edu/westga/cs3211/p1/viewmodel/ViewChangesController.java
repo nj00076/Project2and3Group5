@@ -203,7 +203,7 @@ public class ViewChangesController {
         }
         String time = change.getTimestamp().format(formatter);
         return String.format(
-                "User: %s | Item: %s | Qty: %d | Compartment: %s | Remaining: %d | Date Added: %s | Special Qualities: %s | Expiration: %s",
+                "User: %s | Item: %s | Qty: %d | Compartment: %s | Remaining: %d | Date Added: %s | Special Qualities: %s | Expiration: %s| Change: %s",
                 change.getUsername(),
                 change.getStock().getName(),
                 change.getStock().getQuantity(),
@@ -211,7 +211,8 @@ public class ViewChangesController {
                 change.getRemaining(),
                 time,
                 sq,
-                expDate
+                expDate,
+                change.getReason()
         );
     }
 
