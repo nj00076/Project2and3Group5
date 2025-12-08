@@ -234,7 +234,7 @@ public class HomePageController {
 				this.viewStockChangesButton.setOnAction(this::onViewStockChanges);
 				this.viewStockChangesButton.setDisable(false);
 			} else if ("Cook".equalsIgnoreCase(this.occupation)) {
-				this.viewStockChangesButton.setText("View Expiration Dates");
+				this.viewStockChangesButton.setText("Expiration view");
 				this.viewStockChangesButton.setOnAction(e -> {
 					try {
 						this.onViewExpiration(e);
