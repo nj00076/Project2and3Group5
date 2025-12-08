@@ -10,3 +10,4 @@ Use the following credentials to log into the system:
 Username           | Password      
 Quartermaster      | password     
 Crewmate1          | 12345        
+cook1              | 1234
