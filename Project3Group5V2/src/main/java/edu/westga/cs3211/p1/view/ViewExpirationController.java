@@ -166,33 +166,45 @@ public class ViewExpirationController {
 	 * @return formatted string with color coding
 	 */
 	private String formatFoodItem(Stock stock, LocalDate currentDate) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-		LocalDate expirationDate = stock.getExpirationDate();
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+	    LocalDate expirationDate = stock.getExpirationDate();
 
-		String expirationText;
-		String colorIndicator = "";
+	    String expirationText;
+	    String colorIndicator = "";
+	    String daysLeftText = "";
 
-		if (expirationDate != null) {
-			expirationText = expirationDate.format(formatter);
+	    if (expirationDate != null) {
+	        expirationText = expirationDate.format(formatter);
 
-			long daysUntilExpiry = ChronoUnit.DAYS.between(currentDate, expirationDate);
+	        long daysUntilExpiry = ChronoUnit.DAYS.between(currentDate, expirationDate);
 
-			if (daysUntilExpiry <= 0) {
-				colorIndicator = "[EXPIRED] ";
-			} else if (daysUntilExpiry <= 3) {
-				colorIndicator = "[URGENT] ";
-			} else if (daysUntilExpiry <= 7) {
-				colorIndicator = "[SOON] ";
-			} else {
-				colorIndicator = "[OK] ";
-			}
-		} else {
-			expirationText = "No expiration";
-			colorIndicator = "[NON-PERISHABLE] ";
-		}
+	        // Add days remaining text
+	        daysLeftText = " (" + daysUntilExpiry + " days left)";
 
-		return String.format("%s%s - %s - Expires: %s - Qty: %d - Condition: %s", colorIndicator, stock.getName(),
-				this.getStockType(stock), expirationText, stock.getSize(), stock.getCondition());
+	        if (daysUntilExpiry <= 0) {
+	            colorIndicator = "[EXPIRED] ";
+	        } else if (daysUntilExpiry <= 3) {
+	            colorIndicator = "[URGENT] ";
+	        } else if (daysUntilExpiry <= 7) {
+	            colorIndicator = "[SOON] ";
+	        } else {
+	            colorIndicator = "[OK] ";
+	        }
+	    } else {
+	        expirationText = "No expiration";
+	        colorIndicator = "[NON-PERISHABLE] ";
+	    }
+
+	    return String.format(
+	            "%s%s - %s - Expires: %s%s - Qty: %d - Condition: %s",
+	            colorIndicator,
+	            stock.getName(),
+	            this.getStockType(stock),
+	            expirationText,
+	            daysLeftText,
+	            stock.getSize(),
+	            stock.getCondition()
+	    );
 	}
 
 	/**
