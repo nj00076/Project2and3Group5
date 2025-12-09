@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3211.p1.view.HomePageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3211.p1.view.HomePageController">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
          <padding>
@@ -34,6 +34,7 @@
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="164.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="addStockButton" mnemonicParsing="false" onAction="#onAddStock" text="Add Stock" />
+            <Button fx:id="reportDamageButton" mnemonicParsing="false" onAction="#onReportDamage" text="Report Damage" />
             <Button fx:id="viewStockChangesButton" mnemonicParsing="false" onAction="#onViewStockChanges" prefHeight="25.0" prefWidth="128.0" text="View Stock Changes" />
             <Button fx:id="removeStockButton" mnemonicParsing="false" onAction="#onRemoveStock" text="Remove Stock" />
          </children>

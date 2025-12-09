@@ -80,6 +80,15 @@ public class Stock {
     }
 
     /**
+     * Sets the condition of the item.
+     *
+     * @param condition the condition to update.
+     */
+    public void setCondition(Stock.Condition condition) {
+        this.condition = condition;
+    }
+    
+    /**
      * Returns the list of special qualities of the stock.
      *
      * @return the list of qualities

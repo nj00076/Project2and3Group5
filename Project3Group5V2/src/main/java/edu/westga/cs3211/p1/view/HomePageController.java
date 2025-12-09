@@ -30,6 +30,8 @@ public class HomePageController {
 	@FXML
 	private Button addStockButton;
 	@FXML
+	private Button reportDamageButton;
+	@FXML
 	private Button removeStockButton;
 	@FXML
 	private Button viewStockChangesButton;
@@ -97,6 +99,21 @@ public class HomePageController {
 		Stage stage = (Stage) this.addStockButton.getScene().getWindow();
 		stage.setScene(new Scene(root));
 		stage.setTitle("Pirate Ship Inventory Management System - Add Stock");
+	}
+	
+	@FXML
+	private void onReportDamage() throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/westga/cs3211/p1/view/ReportDamage.fxml"));
+		Parent root = loader.load();
+		ReportDamageController controller = loader.getController();
+		
+		controller.setInventory(InventoryStore.getInventory());
+		controller.setOccupation(this.occupation);
+		controller.setUsername(this.username);
+		
+		Stage stage = (Stage) this.reportDamageButton.getScene().getWindow();
+		stage.setScene(new Scene(root));
+		stage.setTitle("Pirate Ship Inventory Management System - Report Damage");
 	}
 
 	/**
